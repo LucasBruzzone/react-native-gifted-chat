@@ -248,16 +248,18 @@ class GiftedChat extends React.Component {
     this.setIsTypingDisabled(true);
     this.setKeyboardHeight(e.endCoordinates ? e.endCoordinates.height : e.end.height);
     this.setBottomOffset(this.props.bottomOffset);
-    const newMessagesContainerHeight = this.getMessagesContainerHeightWithKeyboard();
-    if (this.props.isAnimated === true) {
-      Animated.timing(this.state.messagesContainerHeight, {
-        toValue: newMessagesContainerHeight,
-        duration: 210,
-      }).start();
-    } else {
-      this.setState({
-        messagesContainerHeight: newMessagesContainerHeight,
-      });
+    if (!this.props.disableKeyboardHandling) {
+      const newMessagesContainerHeight = this.getMessagesContainerHeightWithKeyboard();
+      if (this.props.isAnimated === true) {
+        Animated.timing(this.state.messagesContainerHeight, {
+          toValue: newMessagesContainerHeight,
+          duration: 210,
+        }).start();
+      } else {
+        this.setState({
+          messagesContainerHeight: newMessagesContainerHeight,
+        });
+      }
     }
   }
 
@@ -555,6 +557,7 @@ GiftedChat.defaultProps = {
   onInputTextChanged: null,
   maxInputLength: null,
   forceGetKeyboardHeight: false,
+  disableKeyboardHandling: false,
 };
 
 GiftedChat.propTypes = {
@@ -602,6 +605,7 @@ GiftedChat.propTypes = {
   onInputTextChanged: PropTypes.func,
   maxInputLength: PropTypes.number,
   forceGetKeyboardHeight: PropTypes.bool,
+  disableKeyboardHandling: PropTypes.bool,
 };
 
 export {
