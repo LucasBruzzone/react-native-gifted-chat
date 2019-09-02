@@ -250,6 +250,7 @@ class GiftedChat<TMessage extends IMessage = IMessage> extends React.Component<
     extraData: null,
     minComposerHeight: MIN_COMPOSER_HEIGHT,
     maxComposerHeight: MAX_COMPOSER_HEIGHT,
+    disableKeyboardHandling: false,
   }
 
   static propTypes = {
@@ -309,6 +310,7 @@ class GiftedChat<TMessage extends IMessage = IMessage> extends React.Component<
     minComposerHeight: PropTypes.number,
     maxComposerHeight: PropTypes.number,
     alignTop: PropTypes.bool,
+    
   }
 
   static append<TMessage extends IMessage>(
@@ -548,16 +550,18 @@ class GiftedChat<TMessage extends IMessage = IMessage> extends React.Component<
       e.endCoordinates ? e.endCoordinates.height : e.end.height,
     )
     this.setBottomOffset(this.safeAreaIphoneX(this.props.bottomOffset!))
-    const newMessagesContainerHeight = this.getMessagesContainerHeightWithKeyboard()
-    if (this.props.isAnimated === true) {
-      Animated.timing(this.state.messagesContainerHeight!, {
-        toValue: newMessagesContainerHeight,
-        duration: 210,
-      }).start()
-    } else {
-      this.setState({
-        messagesContainerHeight: newMessagesContainerHeight,
-      })
+    if (!this.props.disableKeyboardHandling) {
+      const newMessagesContainerHeight = this.getMessagesContainerHeightWithKeyboard()
+      if (this.props.isAnimated === true) {
+        Animated.timing(this.state.messagesContainerHeight!, {
+          toValue: newMessagesContainerHeight,
+          duration: 210,
+        }).start()
+      } else {
+        this.setState({
+          messagesContainerHeight: newMessagesContainerHeight,
+        })
+      }
     }
   }
 
